@@ -11,11 +11,6 @@ threshold =  300# microTesla or 'uT'.
 magnet_range = 3000
 
 class Sensor():
-#    magSensor = PiicoDev_QMC6310(range=magnet_range)
-#    dSensor = {}
-#    id = 0
-#    mag_baseline = 0
-#    led = 0
     def __init__(self, id, magSensor, dSensor, led):
         #### Parking Bay ID
         self.id = id
