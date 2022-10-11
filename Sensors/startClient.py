@@ -11,9 +11,12 @@ hostname = ''.join(sys.argv[1:2])
 #Name of carpark on webserver
 carpark = ''.join(sys.argv[2:3])
 #A list of parking bay IDs being measured
-idList = list(sys.argv[3:])
+idList = []
+numBays = int(sys.argv[3:][0])
+
 # Determines if the MQTT instance is currently connected
 flag_connected = 0
+
 
 def on_connect(client, userdata, flags, rc):
     print("Connected with result code "+str(rc))
@@ -36,9 +39,21 @@ client.on_message = on_message
 client.connect(host=hostname, port=1883, keepalive=60)
 
 # Map Each ID to a Sensor
-firstSensor = Sensor(idList[0], 0, {"PIN_TRIGGER": 4, "PIN_ECHO": 17}, {"PIN_LED": 27})
+for i in range(numBays):
+    idList.append(i+1)
+
+print(len(idList))
+firstSensor = Sensor(idList[0], {"BUS": 1}, {"PIN_TRIGGER": 4, "PIN_ECHO": 14}, {"GREEN_LED": 15, "RED_LED": 18})
+
+secondSensor = Sensor(idList[1], {"BUS": 4}, {"PIN_TRIGGER": 5, "PIN_ECHO": 6}, {"GREEN_LED": 10, "RED_LED": 9})
+
+thirdSensor = Sensor(idList[2], {"BUS": 3}, {"PIN_TRIGGER": 21, "PIN_ECHO": 20}, {"GREEN_LED": 16, "RED_LED": 19})
+
 SensorList = []
 SensorList.append(firstSensor)
+SensorList.append(secondSensor)
+SensorList.append(thirdSensor)
+
 
 try:
     while(True):

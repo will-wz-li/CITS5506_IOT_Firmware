@@ -18,16 +18,23 @@ class Sensor():
         self.dSensor = dSensor
         GPIO.setup(self.dSensor['PIN_TRIGGER'], GPIO.OUT)
         GPIO.setup(self.dSensor['PIN_ECHO'], GPIO.IN)
-        #### Magnetometer (Static For Now)
-        self.magSensor = PiicoDev_QMC6310(range=magnet_range)
+        #### Magnetometer
+        self.magSensor = magSensor
+        self.magSensor = PiicoDev_QMC6310(bus=self.magSensor['BUS'],range=magnet_range)
         self.mag_baseline = self.init_sensor()
         ##### LED
-        self.PIN_LED = led['PIN_LED']
-        GPIO.setup(self.PIN_LED, GPIO.OUT)
+        self.led = led
+        GPIO.setup(self.led['GREEN_LED'], GPIO.OUT)
+        GPIO.setup(self.led['RED_LED'], GPIO.OUT)
 
     def getStatus(self):
         occupied = self.check_parking_spot()
-        GPIO.output(self.PIN_LED, occupied)
+        if (occupied):
+            GPIO.output(self.led['RED_LED'], GPIO.HIGH)
+            GPIO.output(self.led['GREEN_LED'], GPIO.LOW)
+        else:
+            GPIO.output(self.led['GREEN_LED'], GPIO.HIGH)
+            GPIO.output(self.led['RED_LED'], GPIO.LOW)
         return occupied                
 
     def magneto(self):
@@ -74,11 +81,11 @@ class Sensor():
         # 1
         dist = self.distance()
         mag = self.magneto()
-        time.sleep(5)
+        time.sleep(0.1)
         # 2
         dist += self.distance()
         mag += self.magneto()
-        time.sleep(5)
+        time.sleep(0.1)
         # 3
         dist += self.distance()
         mag += self.magneto()
@@ -92,8 +99,12 @@ class Sensor():
         print(myString)                        # Print the field strength
         
         if (dist < 100): #100cm = 1m
-            print(self.mag_baseline)
-            if (mag/self.mag_baseline > 1.2):
-                occupied = 1
+            #print(self.mag_baseline)
+            #if (mag/self.mag_baseline > 1.2):
+            occupied = 1
         
         return occupied
+        
+
+                
+
