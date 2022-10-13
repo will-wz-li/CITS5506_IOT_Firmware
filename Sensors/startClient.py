@@ -17,7 +17,6 @@ numBays = int(sys.argv[3:][0])
 # Determines if the MQTT instance is currently connected
 flag_connected = 0
 
-
 def on_connect(client, userdata, flags, rc):
     print("Connected with result code "+str(rc))
     client.subscribe("/carpark")
@@ -57,26 +56,31 @@ SensorList.append(thirdSensor)
 
 try:
     while(True):
-        if(flag_connected == 0):
-            print(f"Attempting to connect to {hostname}")
-            try:
-                client.connect(host=hostname, port=1883, keepalive=60)
-            except timeout:
-                print("Connection timeout")
-        for sensor in SensorList:
-            binarystatus = sensor.getStatus()
-            if(binarystatus == 1):
-                status = "full"
-            else:
-                status = "empty"
-            parkingbay = {
-                "status": status,
-                "carpark": carpark,
-                "id": sensor.id,
-            }
-            client.publish("/carpark", json.dumps(parkingbay))
-        #Refreshes MQTT connection
-        client.loop(0.1)
+        try:
+            if(flag_connected == 0):
+                print(f"Attempting to connect to {hostname}")
+                try:
+                    client.connect(host=hostname, port=1883, keepalive=60)
+                except timeout:
+                    print("Connection timeout")
+                else:
+                    print("Connected!")
+            for sensor in SensorList:
+                binarystatus = sensor.getStatus()
+                if(binarystatus == 1):
+                    status = "full"
+                else:
+                    status = "empty"
+                parkingbay = {
+                    "status": status,
+                    "carpark": carpark,
+                    "id": sensor.id,
+                }
+                client.publish("/carpark", json.dumps(parkingbay))
+            #Refreshes MQTT connection
+            client.loop(0.1)
+        except ConnectionError as err:
+            print("Connection error: "+err)            
 except KeyboardInterrupt:
     print("Stopped")
     GPIO.cleanup()
