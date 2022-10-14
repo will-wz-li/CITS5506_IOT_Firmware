@@ -23,16 +23,16 @@ B2_PIN_ECHO = 6
 GPIO.setup(B2_PIN_TRIGGER, GPIO.OUT)
 GPIO.setup(B2_PIN_ECHO, GPIO.IN)
 
-B3_PIN_TRIGGER = 21
-B3_PIN_ECHO = 20
-GPIO.setup(B3_PIN_TRIGGER, GPIO.OUT)
-GPIO.setup(B3_PIN_ECHO, GPIO.IN)
+#B3_PIN_TRIGGER = 21
+#B3_PIN_ECHO = 20
+#GPIO.setup(B3_PIN_TRIGGER, GPIO.OUT)
+#GPIO.setup(B3_PIN_ECHO, GPIO.IN)
 
 ################# Mag
 magSensor1 = PiicoDev_QMC6310(bus=1, range=3000) # initialise the magnetometer
 # magSensor.calibrate()
 magSensor2 = PiicoDev_QMC6310(bus=4, range=3000) # initialise the magnetometer
-magSensor3 = PiicoDev_QMC6310(bus=3, range=3000) # initialise the magnetometer
+#magSensor3 = PiicoDev_QMC6310(bus=3, range=3000) # initialise the magnetometer
 
 threshold =  300# microTesla or 'uT'.
 
@@ -54,10 +54,10 @@ GPIO.setup(B2_LED_GREEN, GPIO.OUT)
 B2_LED_RED = 9
 GPIO.setup(B2_LED_RED, GPIO.OUT)
 
-B3_LED_GREEN = 16
-GPIO.setup(B3_LED_GREEN, GPIO.OUT)
-B3_LED_RED = 19
-GPIO.setup(B3_LED_RED, GPIO.OUT)
+#B3_LED_GREEN = 16
+#GPIO.setup(B3_LED_GREEN, GPIO.OUT)
+#B3_LED_RED = 19
+#GPIO.setup(B3_LED_RED, GPIO.OUT)
 
     
 def magneto(magSensor):

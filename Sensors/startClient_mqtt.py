@@ -35,7 +35,7 @@ client = mqtt.Client()
 client.on_connect = on_connect
 client.on_disconnect = on_disconnect
 client.on_message = on_message
-##client.connect(host=hostname, port=1883, keepalive=60)
+client.connect(host=hostname, port=1883, keepalive=60)
 
 # Map Each ID to a Sensor
 
@@ -57,7 +57,7 @@ try:
             print(f"Attempting to connect to {hostname}")
             try:
                 pass
-                ##client.connect(host=hostname, port=1883, keepalive=60)
+                client.connect(host=hostname, port=1883, keepalive=60)
             except timeout:
                 print("Connection timeout")
         for sensor in SensorList:
@@ -71,9 +71,10 @@ try:
                 "carpark": carpark,
                 "id": sensor.id,
             }
-            ##client.publish("/carpark", json.dumps(parkingbay))
+            client.publish("/carpark", json.dumps(parkingbay))
         #Refreshes MQTT connection
-        ##client.loop(0.1)
+        client.loop(0.1)
 except KeyboardInterrupt:
     print("Stopped")
     GPIO.cleanup()
+

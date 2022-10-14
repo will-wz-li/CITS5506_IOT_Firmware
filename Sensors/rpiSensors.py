@@ -26,6 +26,11 @@ class Sensor():
         self.led = led
         GPIO.setup(self.led['GREEN_LED'], GPIO.OUT)
         GPIO.setup(self.led['RED_LED'], GPIO.OUT)
+        
+        current_time = datetime.now()
+        current_time = current_time.strftime("%Y-%d-%M-%H-%M-%S")
+        identifier = datetime.now()
+        self.file_object = open(f'Data_{identifier}_{id}.txt', 'a')
 
     def getStatus(self):
         occupied = self.check_parking_spot()
@@ -45,11 +50,11 @@ class Sensor():
     def distance(self):    
         # init
         GPIO.output(self.dSensor['PIN_TRIGGER'], GPIO.LOW)
-        print("Waiting for sensor to settle")
+        # print("Waiting for sensor to settle")
         time.sleep(2)
         
         # calculate distance
-        print("Calulating distance")
+        # print("Calulating distance")
         GPIO.output(self.dSensor['PIN_TRIGGER'], GPIO.HIGH)
         time.sleep(0.00001)
         GPIO.output(self.dSensor['PIN_TRIGGER'], GPIO.LOW)
@@ -81,27 +86,32 @@ class Sensor():
         # 1
         dist = self.distance()
         mag = self.magneto()
-        time.sleep(0.1)
-        # 2
-        dist += self.distance()
-        mag += self.magneto()
-        time.sleep(0.1)
-        # 3
-        dist += self.distance()
-        mag += self.magneto()
-        # average reading
-        dist = dist/3
-        msg = ("Distance:" + str(dist) + "cm")
+#         time.sleep(0.1)
+#         # 2
+#         dist += self.distance()
+#         mag += self.magneto()
+#         time.sleep(0.1)
+#         # 3
+#         dist += self.distance()
+#         mag += self.magneto()
+#         # average reading
+#         dist = dist/3
+        msg = (str(self.id)+ "Distance:" + str(dist) + "cm")
         print(msg)
-        
-        mag = mag/3
-        myString = str(mag) + ' uT'       # create a string with the field-strength and the unit
+#         
+#         mag = mag/3
+        myString = str(self.id) + str(mag) + ' uT'       # create a string with the field-strength and the unit
         print(myString)                        # Print the field strength
         
         if (dist < 100): #100cm = 1m
             #print(self.mag_baseline)
             #if (mag/self.mag_baseline > 1.2):
             occupied = 1
+            
+
+        date = datetime.now()
+        self.file_object.write(str(dist) + " " + str(mag) + " "+
+                        str(date)+ "\n")
         
         return occupied
         

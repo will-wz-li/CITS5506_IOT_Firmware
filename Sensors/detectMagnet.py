@@ -6,7 +6,7 @@ from PiicoDev_Unified import sleep_ms
 magSensor1 = PiicoDev_QMC6310(bus=1, range=3000) # initialise the magnetometer
 # magSensor.calibrate()
 magSensor2 = PiicoDev_QMC6310(bus=4, range=3000) # initialise the magnetometer
-magSensor3 = PiicoDev_QMC6310(bus=3, range=3000) # initialise the magnetometer
+#magSensor3 = PiicoDev_QMC6310(bus=3, range=3000) # initialise the magnetometer
 
 threshold =  300# microTesla or 'uT'.
 
@@ -22,5 +22,5 @@ def readStrength(magSensor, number):
 while True:
     readStrength(magSensor1, '1')
     readStrength(magSensor2, '2')
-    readStrength(magSensor3, '3')
+    #readStrength(magSensor3, '3')
     sleep_ms(1000)
